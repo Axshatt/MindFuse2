@@ -14,7 +14,7 @@ import ChatPanel from "@/components/dashboard/ChatPanel";
 import EmotionChart from "@/components/dashboard/EmotionChart";
 import EmotionSummary from "@/components/dashboard/EmotionSummary";
 import ReportGenerator from "@/components/dashboard/ReportGenerator";
-import Chatbot from "@/components/dashboard/ChatPanel";
+
 
 const Dashboard = () => {
   const {
@@ -214,8 +214,7 @@ const Dashboard = () => {
         </div>
       </main>
 
-      {/* ✅ Floating Chatbot */}
-      <Chatbot />
+
     </div>
   );
 };
