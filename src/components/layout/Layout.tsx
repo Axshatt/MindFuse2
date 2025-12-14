@@ -1,7 +1,7 @@
-import Chatbot from "@/components/Chatbot";
 import { ReactNode } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import Chatbot from "@/components/Chatbot";
 
 interface LayoutProps {
   children: ReactNode;
@@ -19,7 +19,7 @@ const Layout = ({ children, showFooter = true }: LayoutProps) => {
 
       {showFooter && <Footer />}
 
-      {/* ✅ Floating Chatbot (now it will render) */}
+      {/* Floating Chatbot (GLOBAL) */}
       <Chatbot />
     </div>
   );
