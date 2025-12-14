@@ -28,10 +28,11 @@ const HeroSection = () => {
             </div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-              Support Mental
-              <span className="gradient-text text-glow">Wellbeing</span>
-              in Real Time with AI
-            </h1>
+  Support&nbsp;Mental&nbsp;
+  <span className="gradient-text text-glow">Wellbeing&nbsp;</span>
+  in&nbsp;Real&nbsp;Time&nbsp;with&nbsp;AI
+</h1>
+
 
             <p className="text-lg text-muted-foreground mb-8 max-w-lg">
               MindFuse provides AI-assisted mental wellbeing support, offering compassionate insights into mood patterns, reflective prompts, and practical self-care suggestions. Useful for individuals, educators, and professionals focused on mental health and wellbeing.
