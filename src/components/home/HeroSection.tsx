@@ -28,10 +28,14 @@ const HeroSection = () => {
             </div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-  Support&nbsp;Mental&nbsp;
-  <span className="gradient-text text-glow">Wellbeing&nbsp;</span>
-  in&nbsp;Real&nbsp;Time&nbsp;with&nbsp;AI
+  Support Mental
+  <br />
+  <br />
+  <br />
+  <span className="gradient-text text-glow">Wellbeing</span>
+  in Real Time with AI
 </h1>
+
 
 
             <p className="text-lg text-muted-foreground mb-8 max-w-lg">
