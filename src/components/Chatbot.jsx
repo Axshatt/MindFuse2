@@ -22,7 +22,7 @@ export default function Chatbot() {
           credentials: "include",
           body: JSON.stringify({
             message: input,
-            emotion: "neutral", // future me yahan detected emotion pass kar sakte ho
+            emotion: "neutral",
           }),
         }
       );
@@ -45,7 +45,7 @@ export default function Chatbot() {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 w-80 bg-white shadow-lg rounded-xl p-4">
+    <div className="fixed bottom-4 right-4 w-80 bg-white shadow-lg rounded-xl p-4 z-50">
       <h2 className="font-bold mb-2">MindFuse AI</h2>
 
       <div className="h-60 overflow-y-auto border p-2 mb-2">
