@@ -30,8 +30,6 @@ const HeroSection = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
   Support Mental
   <br />
-  <br />
-  <br />
   <span className="gradient-text text-glow">Wellbeing</span>
   in Real Time with AI
 </h1>
