@@ -1,9 +1,14 @@
-import Chatbot from "@/components/Chatbot";
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Brain, LogOut, Play, Square, RefreshCw, User } from "lucide-react";
+import {
+  Brain,
+  LogOut,
+  Play,
+  Square,
+  RefreshCw,
+  User,
+} from "lucide-react";
 
 import { useWebcam } from "@/hooks/useWebcam";
 import { useEmotionDetector } from "@/hooks/useEmotionDetector";
@@ -14,7 +19,6 @@ import ChatPanel from "@/components/dashboard/ChatPanel";
 import EmotionChart from "@/components/dashboard/EmotionChart";
 import EmotionSummary from "@/components/dashboard/EmotionSummary";
 import ReportGenerator from "@/components/dashboard/ReportGenerator";
-
 
 const Dashboard = () => {
   const {
@@ -40,15 +44,14 @@ const Dashboard = () => {
 
   const [emotionHistory, setEmotionHistory] = useState(getEmotionHistory());
 
-  // Update emotion history
   useEffect(() => {
-    if (isDetecting) {
-      const interval = setInterval(() => {
-        setEmotionHistory(getEmotionHistory());
-      }, 500);
+    if (!isDetecting) return;
 
-      return () => clearInterval(interval);
-    }
+    const interval = setInterval(() => {
+      setEmotionHistory(getEmotionHistory());
+    }, 500);
+
+    return () => clearInterval(interval);
   }, [isDetecting, getEmotionHistory]);
 
   const handleStartCamera = async () => {
@@ -79,12 +82,14 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background neural-grid">
       {/* Header */}
-      <header className="border-b border-border glass-strong sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
+      <header className="border-b border-border bg-background/80 backdrop-blur sticky top-0 z-50">
+        <div className="mx-auto max-w-7xl px-4 py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2">
               <Brain className="w-8 h-8 text-primary" />
-              <span className="text-xl font-bold gradient-text">MindFuse</span>
+              <span className="text-xl font-bold gradient-text">
+                MindFuse
+              </span>
             </Link>
 
             <div className="flex items-center gap-4">
@@ -97,7 +102,7 @@ const Dashboard = () => {
                     className="btn-primary text-sm disabled:opacity-50"
                   >
                     <Play className="w-4 h-4" />
-                    Start Detection
+                    Start
                   </button>
                 ) : (
                   <button
@@ -105,7 +110,7 @@ const Dashboard = () => {
                     className="btn-secondary text-sm"
                   >
                     <Square className="w-4 h-4" />
-                    Stop Detection
+                    Stop
                   </button>
                 )}
 
@@ -135,7 +140,7 @@ const Dashboard = () => {
       </header>
 
       {/* Main */}
-      <main className="container mx-auto px-4 py-6">
+      <main className="mx-auto max-w-7xl px-4 py-6">
         {/* Mobile Controls */}
         <div className="md:hidden flex gap-2 mb-6">
           {!isDetecting ? (
@@ -145,7 +150,7 @@ const Dashboard = () => {
               className="btn-primary flex-1 justify-center text-sm disabled:opacity-50"
             >
               <Play className="w-4 h-4" />
-              Start Detection
+              Start
             </button>
           ) : (
             <button
@@ -153,7 +158,7 @@ const Dashboard = () => {
               className="btn-secondary flex-1 justify-center text-sm"
             >
               <Square className="w-4 h-4" />
-              Stop Detection
+              Stop
             </button>
           )}
           <button onClick={handleReset} className="btn-secondary text-sm">
@@ -161,10 +166,11 @@ const Dashboard = () => {
           </button>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* Left */}
-          <div className="lg:col-span-2 space-y-6">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        {/* Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 items-start">
+          {/* Left Column */}
+          <div className="space-y-4">
+            <motion.div className="card" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               <WebcamView
                 videoRef={videoRef}
                 isActive={isActive}
@@ -178,11 +184,10 @@ const Dashboard = () => {
               />
             </motion.div>
 
-            {/* Chart */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              className="card"
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15 }}
             >
               <ChatPanel
                 emotionHistory={emotionHistory}
@@ -191,30 +196,36 @@ const Dashboard = () => {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              className="card"
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
             >
               <EmotionChart emotionHistory={emotionHistory} />
             </motion.div>
           </div>
 
-          {/* Right */}
-          <div className="space-y-6">
-            <CurrentEmotionDisplay
-              currentEmotion={currentEmotion}
-              isDetecting={isDetecting}
-            />
-            <EmotionSummary emotionHistory={emotionHistory} />
-            <ReportGenerator
-              emotionHistory={emotionHistory}
-              isDisabled={emotionHistory.length === 0}
-            />
+          {/* Right Column */}
+          <div className="space-y-4 sticky top-24">
+            <div className="card">
+              <CurrentEmotionDisplay
+                currentEmotion={currentEmotion}
+                isDetecting={isDetecting}
+              />
+            </div>
+
+            <div className="card">
+              <EmotionSummary emotionHistory={emotionHistory} />
+            </div>
+
+            <div className="card">
+              <ReportGenerator
+                emotionHistory={emotionHistory}
+                isDisabled={emotionHistory.length === 0}
+              />
+            </div>
           </div>
         </div>
       </main>
-
-
     </div>
   );
 };
