@@ -1,4 +1,3 @@
-import Chatbot from "@/components/Chatbot";
 import { ReactNode } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
@@ -19,8 +18,7 @@ const Layout = ({ children, showFooter = true }: LayoutProps) => {
 
       {showFooter && <Footer />}
 
-      {/* ✅ Floating Chatbot (now it will render) */}
-      <Chatbot />
+  
     </div>
   );
 };
