@@ -30,7 +30,8 @@ const EmotionPreview = () => {
       <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-glow-secondary/20 rounded-3xl blur-3xl" />
       
       <div className="relative card-glass p-6 rounded-3xl">
-        {/* Simulated Camera View */}
+        {/* Wellbeing Snapshot (Demo) */}
+        <h4 className="text-sm font-semibold mb-2">Wellbeing Snapshot</h4>
         <div className="relative aspect-video bg-secondary rounded-2xl overflow-hidden mb-6">
           <div className="absolute inset-0 flex items-center justify-center">
             {/* Face Detection Overlay */}
@@ -70,14 +71,14 @@ const EmotionPreview = () => {
           {/* Camera UI Elements */}
           <div className="absolute top-4 left-4 flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-destructive animate-pulse" />
-            <span className="text-xs text-muted-foreground">LIVE</span>
+            <span className="text-xs text-muted-foreground">DEMO</span>
           </div>
           <div className="absolute top-4 right-4 text-xs text-muted-foreground">
             1080p @ 30fps
           </div>
         </div>
 
-        {/* Emotion Bars */}
+        {/* Mood Indicators */}
         <div className="space-y-3">
           {emotions.slice(0, 4).map((e, i) => (
             <motion.div

@@ -20,11 +20,10 @@ const CTASection = () => {
             <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-glow-secondary/30 rounded-full blur-3xl" />
             
             <h2 className="section-title mb-4 relative">
-              Ready to Decode Emotions?
+              Ready to Prioritize Your Mental Wellbeing?
             </h2>
             <p className="text-muted-foreground text-lg mb-8 relative">
-              Start analyzing facial emotions in real-time with our AI-powered platform. 
-              No setup required – just open your webcam and go.
+              Start receiving compassionate AI-assisted wellbeing support and insights. No setup required — create an account and begin your self-care journey.
             </p>
             <div className="flex flex-wrap justify-center gap-4 relative">
               <Link to="/register" className="btn-primary group">

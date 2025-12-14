@@ -4,6 +4,7 @@ import session from "express-session";
 import passport from "passport";
 import dotenv from "dotenv";
 import OpenAI from "openai";
+import openrouterReportService from "./services/openrouterReportService.js";
 
 // Load env variables
 dotenv.config();
@@ -110,6 +111,19 @@ Respond calmly, positively, and without giving medical diagnosis.
     res.status(500).json({
       reply: "Sorry, I’m having trouble responding right now.",
     });
+  }
+});
+
+/* -------------------- DOCTOR-STYLE REPORT (OpenRouter) -------------------- */
+
+app.post("/api/report/doctor", async (req, res) => {
+  try {
+    const { emotionHistory, currentEmotion, patientInfo } = req.body;
+    const report = await openrouterReportService.generateDoctorReport({ emotionHistory, currentEmotion, patientInfo });
+    res.json({ report });
+  } catch (err) {
+    console.error("Doctor report error:", err);
+    res.status(500).json({ error: "Doctor report generation failed" });
   }
 });
 

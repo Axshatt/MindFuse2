@@ -5,22 +5,22 @@ const useCases = [
   {
     icon: GraduationCap,
     title: "Education",
-    description: "Monitor student engagement and stress levels during online classes for better learning outcomes.",
+    description: "Support student wellbeing and engagement during online learning with non-intrusive insights.",
   },
   {
     icon: HeartPulse,
     title: "Mental Health",
-    description: "Track emotional patterns over time to support mental health professionals in diagnosis and therapy.",
+    description: "Track mood patterns and progress over time to provide helpful context for care and self-monitoring.",
   },
   {
     icon: Users,
     title: "HR & Interviews",
-    description: "Analyze candidate emotions during interviews for better hiring decisions and fair assessments.",
+    description: "Provide wellbeing-aware insights to support fairer, more empathetic remote interactions.",
   },
   {
     icon: Microscope,
     title: "Research",
-    description: "Collect emotion data for behavioral research, UX studies, and human-computer interaction.",
+    description: "Collect anonymized wellbeing insights for behavioral and mental health research.",
   },
 ];
 
@@ -35,10 +35,10 @@ const UseCasesSection = () => {
           className="text-center mb-16"
         >
           <h2 className="section-title mb-4">
-            Built for Every Industry
+            Built for Wellbeing
           </h2>
           <p className="section-subtitle">
-            From education to healthcare, MindFuse empowers organizations with emotional intelligence.
+            From education to healthcare, MindFuse supports mental wellbeing with practical, non-clinical insights.
           </p>
         </motion.div>
 

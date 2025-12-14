@@ -23,25 +23,23 @@ const HeroSection = () => {
             <div className="flex items-center gap-2 mb-6">
               <div className="flex items-center gap-2 px-4 py-2 glass rounded-full">
                 <Sparkles className="w-4 h-4 text-primary" />
-                <span className="text-sm text-muted-foreground">AI-Powered Emotion Detection</span>
+                <span className="text-sm text-muted-foreground">AI-Powered Mental Wellness Support</span>
               </div>
             </div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-              Understand Human{" "}
-              <span className="gradient-text text-glow">Emotions</span>{" "}
+              Support Mental
+              <span className="gradient-text text-glow">Wellbeing</span>
               in Real Time with AI
             </h1>
 
             <p className="text-lg text-muted-foreground mb-8 max-w-lg">
-              MindFuse uses advanced facial recognition and machine learning to detect 
-              and analyze emotions instantly. Perfect for mental health, education, 
-              interviews, and behavioral research.
+              MindFuse provides AI-assisted mental wellbeing support, offering compassionate insights into mood patterns, reflective prompts, and practical self-care suggestions. Useful for individuals, educators, and professionals focused on mental health and wellbeing.
             </p>
 
             <div className="flex flex-wrap gap-4 mb-12">
               <Link to="/register" className="btn-primary group">
-                Start Analyzing
+                Get Started
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link to="/how-it-works" className="btn-secondary">
@@ -52,9 +50,9 @@ const HeroSection = () => {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-6">
               {[
-                { value: "6+", label: "Emotions Detected" },
-                { value: "Real-time", label: "Analysis" },
-                { value: "99%", label: "Accuracy" },
+                  { value: "24/7", label: "Support" },
+                { value: "Real-time", label: "Insights" },
+                { value: "Practical", label: "Guidance" },
               ].map((stat, i) => (
                 <motion.div
                   key={i}

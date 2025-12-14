@@ -32,6 +32,7 @@ It is designed to support **mental health awareness, education engagement, inter
 - Express.js
 - Passport.js (Google OAuth)
 - OpenAI API (AI Chatbot)
+- OpenRouter API (Clinician-style reports - optional)
 - dotenv
 
 ---
@@ -79,4 +80,12 @@ http://localhost:5173
 cd backend
 npm install
 node server.js
+
+Optional: Clinician-Style Reports (OpenRouter or Direct OpenAI from client)
+
+- Add `OPENROUTER_API_KEY` to your backend environment to enable `POST /api/report/doctor` which accepts `{ emotionHistory, currentEmotion, patientInfo? }` and returns a clinician-friendly structured report. The report includes `clinicalSummary`, `timeline`, `dominantEmotions`, `observations`, `suggestions`, `limitations`, and `recommendedFollowUp`.
+
+- (Developer mode) You can also enable direct client-side OpenAI calls for rapid iterations (INSECURE — exposes API key in browser). To enable:
+  - Set `VITE_ALLOW_CLIENT_OPENAI=true` and `VITE_OPENAI_KEY=sk-...` in your frontend env. The Report Generator will then call OpenAI directly instead of the backend.
+  - Warning: Do NOT use client-side keys in production; prefer server-side requests for security.
 

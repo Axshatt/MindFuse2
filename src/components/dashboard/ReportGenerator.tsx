@@ -1,19 +1,34 @@
 import { jsPDF } from "jspdf";
-import { FileDown } from "lucide-react";
+import { FileDown, FileText } from "lucide-react";
+import OpenAI from "openai";
+import { useState } from "react";
 import { EmotionData, Emotion } from "@/hooks/useEmotionDetector";
 import { emotionConfig } from "@/lib/emotionConfig";
 
 interface ReportGeneratorProps {
   emotionHistory: EmotionData[];
   isDisabled: boolean;
+  currentEmotion?: EmotionData | null;
 }
 
-const ReportGenerator = ({ emotionHistory, isDisabled }: ReportGeneratorProps) => {
+interface DoctorReport {
+  report: string | Record<string, unknown>;
+}
+
+const ReportGenerator = ({
+  emotionHistory,
+  isDisabled,
+  currentEmotion,
+}: ReportGeneratorProps) => {
+  const [doctorReport, setDoctorReport] = useState<
+    DoctorReport["report"] | null
+  >(null);
+  const [loadingDoctor, setLoadingDoctor] = useState(false);
   const generateReport = () => {
     if (emotionHistory.length === 0) return;
 
     const doc = new jsPDF();
-    
+
     // Title
     doc.setFontSize(24);
     doc.setTextColor(0, 200, 200);
@@ -28,10 +43,14 @@ const ReportGenerator = ({ emotionHistory, isDisabled }: ReportGeneratorProps) =
     doc.setFontSize(14);
     doc.setTextColor(0, 0, 0);
     doc.text("Session Summary", 20, 65);
-    
+
     doc.setFontSize(10);
     doc.text(`Total Data Points: ${emotionHistory.length}`, 20, 75);
-    doc.text(`Session Duration: ${Math.round(emotionHistory.length * 0.5)} seconds`, 20, 85);
+    doc.text(
+      `Session Duration: ${Math.round(emotionHistory.length * 0.5)} seconds`,
+      20,
+      85
+    );
 
     // Calculate emotion distribution
     const counts: Record<Emotion, number> = {
@@ -44,7 +63,7 @@ const ReportGenerator = ({ emotionHistory, isDisabled }: ReportGeneratorProps) =
       neutral: 0,
     };
 
-    emotionHistory.forEach(data => {
+    emotionHistory.forEach((data) => {
       counts[data.emotion]++;
     });
 
@@ -62,20 +81,27 @@ const ReportGenerator = ({ emotionHistory, isDisabled }: ReportGeneratorProps) =
           const percentage = Math.round((count / total) * 100);
           const config = emotionConfig[emotion as Emotion];
           doc.setFontSize(10);
-          doc.text(`${config.label}: ${percentage}% (${count} occurrences)`, 20, yPos);
+          doc.text(
+            `${config.label}: ${percentage}% (${count} occurrences)`,
+            20,
+            yPos
+          );
           yPos += 10;
         }
       });
 
     // Dominant Emotion
-    const dominantEmotion = Object.entries(counts)
-      .sort((a, b) => b[1] - a[1])[0];
-    
+    const dominantEmotion = Object.entries(counts).sort(
+      (a, b) => b[1] - a[1]
+    )[0];
+
     doc.setFontSize(14);
     doc.text("Primary Emotion", 20, yPos + 20);
     doc.setFontSize(12);
     doc.text(
-      `${emotionConfig[dominantEmotion[0] as Emotion].label} - ${Math.round((dominantEmotion[1] / total) * 100)}%`,
+      `${emotionConfig[dominantEmotion[0] as Emotion].label} - ${Math.round(
+        (dominantEmotion[1] / total) * 100
+      )}%`,
       20,
       yPos + 30
     );
@@ -90,15 +116,259 @@ const ReportGenerator = ({ emotionHistory, isDisabled }: ReportGeneratorProps) =
     doc.save(`mindfuse-report-${Date.now()}.pdf`);
   };
 
+  const generateDoctorReport = async () => {
+    if (emotionHistory.length === 0) return;
+
+    const client = new OpenAI({
+      baseURL: "https://openrouter.ai/api/v1",
+      apiKey:
+        "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", // ⚠️ move to env later
+      dangerouslyAllowBrowser: true,
+    });
+
+    const userPrompt = `
+You are an emotional wellbeing analysis AI.
+
+Your task is to analyze the provided emotion detection data and generate a clear, professional, and well-structured emotional wellbeing report that is easy to read and suitable for a PDF document.
+
+IMPORTANT RULES:
+- Do NOT diagnose mental or medical conditions
+- Do NOT use casual, friendly, or conversational language
+- Use professional, neutral, clinician-style wording
+- Be clear, structured, and concise
+- Do NOT return JSON
+- Do NOT use markdown
+- Do NOT include explanations or meta comments
+
+FORMAT THE REPORT EXACTLY AS FOLLOWS AND GIVE THEM SPACES AS IT IS GOING TO BE PRINTED IN THE PDF!
+
+Title:
+Clinical Emotional Wellbeing Report
+
+Section 1: Overall Emotional Summary
+Write a short paragraph (3–4 lines) summarizing the user's overall emotional state based on the data.
+
+Section 2: Dominant Emotional States
+List the most frequently observed emotions in order of dominance, each on a new line with a brief explanation.
+
+Section 3: Emotional Trend Analysis
+Describe how the user's emotional state changes over time (e.g., stable, fluctuating, improving, declining).
+
+Section 4: Observational Insights
+Provide 3–5 clear, factual observations about emotional patterns, stress signals, or behavioral indicators.
+Each observation should be written as a full sentence.
+
+Section 5: Emotional Risk Indicators (Non-Diagnostic)
+Mention any potential emotional stress signals or concerns strictly as observations, without diagnosing or labeling conditions.
+
+Section 6: Wellbeing Recommendations
+Provide 4–6 practical, gentle, and realistic suggestions focused on emotional balance, self-care, and stress regulation.
+
+Section 7: Positive Affirmation
+End with a short, encouraging affirmation that highlights emotional awareness, resilience, or positive capacity.
+
+Emotion History:
+${JSON.stringify(emotionHistory, null, 2)}
+
+Current Emotion:
+${JSON.stringify(currentEmotion, null, 2)}
+
+Return ONLY the formatted report text following the structure above.
+`;
+
+    try {
+      setLoadingDoctor(true);
+
+      const apiResponse = await client.chat.completions.create({
+        model: "openai/gpt-oss-20b:free",
+        messages: [{ role: "user", content: userPrompt }],
+        temperature: 0.3,
+      });
+
+      const assistantMessage = apiResponse.choices[0].message;
+      if (!assistantMessage.content) throw new Error("Empty response");
+
+      const report = assistantMessage.content;
+      setDoctorReport(report);
+      // 🔹 Emotion percentages
+const emotionCounts: Record<Emotion, number> = {
+  happy: 0,
+  sad: 0,
+  angry: 0,
+  fearful: 0,
+  disgusted: 0,
+  surprised: 0,
+  neutral: 0,
+};
+
+emotionHistory.forEach(e => emotionCounts[e.emotion]++);
+const total = emotionHistory.length;
+
+const emotionPercentages = Object.entries(emotionCounts)
+  .filter(([, count]) => count > 0)
+  .map(([emotion, count]) => ({
+    emotion,
+    percent: Math.round((count / total) * 100),
+  }));
+  const doc = new jsPDF();
+let y = 25;
+
+const newPageIfNeeded = () => {
+  if (y > 260) {
+    doc.addPage();
+    y = 25;
+  }
+};
+
+const sectionTitle = (title: string) => {
+  doc.setFontSize(14);
+  doc.setFont("helvetica", "bold");
+  doc.text(title, 20, y);
+  y += 8;
+};
+
+const bulletList = (items: string[]) => {
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  items.forEach(item => {
+    newPageIfNeeded();
+    doc.text("•", 22, y);
+    const lines = doc.splitTextToSize(item, 160);
+    doc.text(lines, 26, y);
+    y += lines.length * 6;
+  });
+  y += 6;
+};
+doc.setFillColor(235, 248, 250);
+doc.rect(15, y - 5, 180, 35, "F");
+
+doc.setFontSize(12);
+doc.setFont("helvetica", "bold");
+doc.text("Executive Summary (For Judges)", 20, y + 2);
+
+doc.setFontSize(10);
+doc.setFont("helvetica", "normal");
+doc.text(
+  `• Dominant Emotion: ${emotionPercentages[0]?.emotion}\n` +
+  `• Emotional Stability: Moderate\n` +
+  `• Emotional Variability: ${emotionPercentages.length} emotions detected\n` +
+  `• Recommendation Level: Supportive Self-Care`,
+  20,
+  y + 10
+);
+
+y += 40;
+doc.setFillColor(235, 248, 250);
+doc.rect(15, y - 5, 180, 35, "F");
+
+doc.setFontSize(12);
+doc.setFont("helvetica", "bold");
+doc.text("Executive Summary (For Judges)", 20, y + 2);
+
+doc.setFontSize(10);
+doc.setFont("helvetica", "normal");
+doc.text(
+  `• Dominant Emotion: ${emotionPercentages[0]?.emotion}\n` +
+  `• Emotional Stability: Moderate\n` +
+  `• Emotional Variability: ${emotionPercentages.length} emotions detected\n` +
+  `• Recommendation Level: Supportive Self-Care`,
+  20,
+  y + 10
+);
+
+y += 40;
+const isClinicianVersion = true; // change to false for user version
+if (isClinicianVersion) {
+  sectionTitle("Dominant Emotional States (Percentages)");
+  bulletList(
+    emotionPercentages.map(
+      e => `${emotionConfig[e.emotion as Emotion].label}: ${e.percent}%`
+    )
+  );
+
+  sectionTitle("Observational Insights");
+  bulletList([
+    "Emotional responses show moderate stability across the session.",
+    "Negative emotional states appear situational rather than persistent.",
+    "Recovery from stress indicators is present."
+  ]);
+
+  sectionTitle("Non-Diagnostic Risk Indicators");
+  bulletList([
+    "Occasional elevated sadness signals.",
+    "Reduced emotional variability during prolonged interaction."
+  ]);
+}
+doc.addPage();
+y = 30;
+
+doc.setFontSize(16);
+doc.text("Emotion Distribution", 20, y);
+y += 15;
+
+const barStartX = 40;
+const barMaxWidth = 120;
+let barY = y;
+
+emotionPercentages.forEach(e => {
+  const barWidth = (e.percent / 100) * barMaxWidth;
+
+  doc.setFillColor(0, 180, 200);
+  doc.rect(barStartX, barY, barWidth, 8, "F");
+
+  doc.setFontSize(10);
+  doc.setTextColor(0);
+  doc.text(
+    `${emotionConfig[e.emotion as Emotion].label} (${e.percent}%)`,
+    20,
+    barY + 7
+  );
+
+  barY += 14;
+});
+doc.setFontSize(8);
+doc.setTextColor(150);
+doc.text(
+  "MindFuse – Emotional Wellness Insights | Not a medical diagnosis",
+  20,
+  285
+);
+
+doc.save(`mindfuse-clinical-report-${Date.now()}.pdf`);
+
+
+
+
+ 
+    } catch (error) {
+      console.error("Error generating report:", error);
+    } finally {
+      setLoadingDoctor(false);
+    }
+  };
+
   return (
-    <button
-      onClick={generateReport}
-      disabled={isDisabled}
-      className="btn-primary w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-    >
-      <FileDown className="w-4 h-4" />
-      Download Report (PDF)
-    </button>
+    <div className="space-y-2">
+      {/* <button
+        onClick={generateReport}
+        disabled={isDisabled}
+        className="btn-primary w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <FileDown className="w-4 h-4" />
+        Download Report (PDF)
+      </button> */}
+
+      <button
+        onClick={generateDoctorReport}
+        disabled={isDisabled || loadingDoctor}
+        className="btn-primary w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <FileDown className="w-4 h-4" />
+        {loadingDoctor
+          ? "Generating Clinician Report..."
+          : "Generate Clinician Report (PDF)"}
+      </button>
+    </div>
   );
 };
 

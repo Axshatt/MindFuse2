@@ -8,6 +8,7 @@ import { useEmotionDetector } from "@/hooks/useEmotionDetector";
 
 import WebcamView from "@/components/dashboard/WebcamView";
 import CurrentEmotionDisplay from "@/components/dashboard/CurrentEmotionDisplay";
+import ChatPanel from "@/components/dashboard/ChatPanel";
 import EmotionChart from "@/components/dashboard/EmotionChart";
 import EmotionSummary from "@/components/dashboard/EmotionSummary";
 import ReportGenerator from "@/components/dashboard/ReportGenerator";
@@ -119,7 +120,10 @@ const Dashboard = () => {
                 <div className="w-8 h-8 rounded-full gradient-bg flex items-center justify-center">
                   <User className="w-4 h-4 text-primary-foreground" />
                 </div>
-                <Link to="/" className="text-muted-foreground hover:text-foreground">
+                <Link
+                  to="/"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
                   <LogOut className="w-5 h-5" />
                 </Link>
               </div>
@@ -150,7 +154,6 @@ const Dashboard = () => {
               Stop Detection
             </button>
           )}
-
           <button onClick={handleReset} className="btn-secondary text-sm">
             <RefreshCw className="w-4 h-4" />
           </button>
@@ -173,7 +176,25 @@ const Dashboard = () => {
               />
             </motion.div>
 
-            <EmotionChart emotionHistory={emotionHistory} />
+            {/* Chart */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+            >
+              <ChatPanel
+                emotionHistory={emotionHistory}
+                currentEmotion={currentEmotion}
+              />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <EmotionChart emotionHistory={emotionHistory} />
+            </motion.div>
           </div>
 
           {/* Right */}
