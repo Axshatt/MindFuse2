@@ -164,7 +164,7 @@ Provide:
     <button
       onClick={generateDoctorReport}
       disabled={isDisabled || loading}
-      className="btn-secondary w-full justify-center disabled:opacity-50"
+      className="btn-primary w-full justify-center disabled:opacity-50"
     >
       <FileText className="w-4 h-4" />
       {loading ? "Generating Doctor Report..." : "Generate Doctor Report (PDF)"}
