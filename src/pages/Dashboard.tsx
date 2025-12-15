@@ -219,8 +219,9 @@ const Dashboard = () => {
 
             <div className="card">
               <ReportGenerator
-                emotionHistory={emotionHistory}
-                isDisabled={emotionHistory.length === 0}
+                 emotionHistory={emotionHistory}
+  currentEmotion={currentEmotion}
+  isDisabled={emotionHistory.length === 0}
               />
             </div>
           </div>
