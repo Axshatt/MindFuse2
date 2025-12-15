@@ -17,7 +17,7 @@ const client = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
-const DoctorReportGenerator = ({ emotionHistory, currentEmotion, isDisabled }: Props) => {
+const ReportGenerator = ({ emotionHistory, currentEmotion, isDisabled }: Props) => {
   const [loading, setLoading] = useState(false);
 
   const generateDoctorReport = async () => {
@@ -172,4 +172,4 @@ Provide:
   );
 };
 
-export default DoctorReportGenerator;
+export default ReportGenerator;
