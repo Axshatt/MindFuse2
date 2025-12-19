@@ -4,32 +4,32 @@ import { Github, Linkedin, Twitter, Mail } from "lucide-react";
 
 const teamMembers = [
   {
-    name: "Team Member 1",
+    name: "Akshat Singh",
     role: "AI/ML Engineer",
     description: "Specializes in computer vision and deep learning for emotion recognition.",
     avatar: "🧑‍💻",
-    socials: { github: "#", linkedin: "#" },
+    socials: { github: "https://github.com/Axshatt", linkedin: "https://www.linkedin.com/in/axshattt/" },
   },
   {
-    name: "Team Member 2",
+    name: "Shifa Praveen",
     role: "Frontend Developer",
     description: "Creates beautiful, responsive user interfaces with React and modern CSS.",
     avatar: "👩‍💻",
-    socials: { github: "#", linkedin: "#" },
+    socials: { github: "https://github.com/shifa-23", linkedin: "https://www.linkedin.com/in/shifa-parveen-45a5b0326/" },
   },
   {
-    name: "Team Member 3",
+    name: "Vinayak Pandey",
     role: "Backend Developer",
     description: "Builds scalable APIs and manages database architecture.",
     avatar: "🧑‍🔬",
-    socials: { github: "#", linkedin: "#" },
+    socials: { github: "https://github.com/vinayakpandeycode", linkedin: "https://www.linkedin.com/in/vinayakpandeya/" },
   },
   {
-    name: "Team Member 4",
+    name: "Aditi Mall",
     role: "UI/UX Designer",
     description: "Designs intuitive user experiences and compelling visual designs.",
     avatar: "👨‍🎨",
-    socials: { github: "#", linkedin: "#" },
+    socials: { github: "#", linkedin: "https://www.linkedin.com/in/aditi-mall-27658b28a/" },
   },
 ];
 
