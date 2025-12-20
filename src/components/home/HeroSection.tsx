@@ -41,7 +41,7 @@ const HeroSection = () => {
             </p>
 
             <div className="flex flex-wrap gap-4 mb-12">
-              <Link to="/register" className="btn-primary group">
+              <Link to="/dashboard" className="btn-primary group">
                 Get Started
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
