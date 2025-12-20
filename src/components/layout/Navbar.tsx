@@ -51,16 +51,6 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Auth Buttons */}
-          <div className="hidden md:flex items-center gap-4">
-            <Link to="/login" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              Login
-            </Link>
-            <Link to="/register" className="btn-primary text-sm">
-              Get Started
-            </Link>
-          </div>
-
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
